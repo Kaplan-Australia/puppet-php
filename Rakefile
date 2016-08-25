@@ -1,6 +1,18 @@
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 
+# blacksmith is broken with ruby 1.8.7
+if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8.7')
+  # blacksmith isn't always present, e.g. on Travis with --without development
+  begin
+    require 'puppet_blacksmith/rake_tasks'
+    Blacksmith::RakeTask.new do |t|
+      t.tag_pattern = "%s"
+    end
+  rescue LoadError
+  end
+end
+
 Rake::Task['lint'].clear
 
 PuppetLint::RakeTask.new :lint do |config|
@@ -9,17 +21,3 @@ PuppetLint::RakeTask.new :lint do |config|
 end
 
 task :default => [:validate, :lint, :spec]
-
-namespace :spec do
-  task :acceptance do
-    ['centos65', 'debian7', 'sles11sp3', 'ubuntu1404'].each do |set|
-      name = 'spec:acceptance:' + set
-      ENV['BEAKER_set'] = set
-      ENV['BEAKER_destroy'] = 'onpass'
-      Spec::Rake::SpecTask.new(name) do |t|
-        t.pattern = 'spec/acceptance/**/*_spec.rb'
-      end
-      Rake::Task[name].invoke
-    end
-  end
-end

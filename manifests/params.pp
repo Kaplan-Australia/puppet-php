@@ -23,7 +23,7 @@ class php::params inherits php::globals {
       $common_package_suffixes = ['cli', 'common']
       $cli_inifile             = "${config_root}/cli/php.ini"
       $dev_package_suffix      = 'dev'
-      $fpm_pid_file            = $php::globals::fpm_pid_file
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
       $fpm_config_file         = "${config_root}/fpm/php-fpm.conf"
       $fpm_error_log           = $php::globals::fpm_error_log
       $fpm_inifile             = "${config_root}/fpm/php.ini"
@@ -57,16 +57,22 @@ class php::params inherits php::globals {
     }
 
     'Suse': {
+      if ($php::globals::php_version != undef) {
+        $php_version_major = regsubst($php::globals::php_version, '^(\d+)\.(\d+)$','\1')
+      } else {
+        $php_version_major = 5
+      }
+
       $config_root             = $php::globals::globals_config_root
       $config_root_ini         = "${config_root}/conf.d"
       $config_root_inifile     = "${config_root}/php.ini"
-      $common_package_names    = ['php5']
+      $common_package_names    = ["php${php_version_major}"]
       $common_package_suffixes = []
       $cli_inifile             = "${config_root}/cli/php.ini"
       $dev_package_suffix      = 'devel'
-      $fpm_pid_file            = '/var/run/php5-fpm.pid'
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
       $fpm_config_file         = "${config_root}/fpm/php-fpm.conf"
-      $fpm_error_log           = '/var/log/php5-fpm.log'
+      $fpm_error_log           = $php::globals::fpm_error_log
       $fpm_inifile             = "${config_root}/fpm/php.ini"
       $fpm_package_suffix      = 'fpm'
       $fpm_pool_dir            = "${config_root}/fpm/pool.d"
@@ -75,7 +81,7 @@ class php::params inherits php::globals {
       $fpm_group               = 'www'
       $embedded_package_suffix = 'embed'
       $embedded_inifile        = "${config_root}/embed/php.ini"
-      $package_prefix          = 'php5-'
+      $package_prefix          = $php::globals::package_prefix
       $manage_repos            = true
       $root_group              = 'root'
       $ext_tool_enabled        = false
@@ -98,7 +104,7 @@ class php::params inherits php::globals {
       $common_package_suffixes = ['cli', 'common']
       $cli_inifile             = '/etc/php-cli.ini'
       $dev_package_suffix      = 'devel'
-      $fpm_pid_file            = '/var/run/php-fpm/php-fpm.pid'
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
       $fpm_config_file         = '/etc/php-fpm.conf'
       $fpm_error_log           = '/var/log/php-fpm/error.log'
       $fpm_inifile             = '/etc/php-fpm.ini'
@@ -126,7 +132,7 @@ class php::params inherits php::globals {
       $common_package_suffixes = ['extensions']
       $cli_inifile             = "${config_root}/php-cli.ini"
       $dev_package_suffix      = undef
-      $fpm_pid_file            = '/var/run/php-fpm.pid'
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
       $fpm_config_file         = "${config_root}/php-fpm.conf"
       $fpm_error_log           = '/var/log/php-fpm.log'
       $fpm_inifile             = "${config_root}/php-fpm.ini"

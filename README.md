@@ -1,4 +1,4 @@
-[![GitHub version](https://badge.fury.io/gh/mayflower%2Fpuppet-php.svg)](https://github.com/mayflower/puppet-php)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/mayflower/php.svg)](https://forge.puppetlabs.com/mayflower/php)
 [![Build Status](https://travis-ci.org/mayflower/puppet-php.svg?branch=master)](https://travis-ci.org/mayflower/puppet-php)
 
 ## Current Status
@@ -186,12 +186,6 @@ older though still supported distribution release. Our default is to have
 [ppa:ondrej/php5](https://launchpad.net/~ondrej/+archive/ubuntu/php5/) on
 Ubuntu with packages for the current stable PHP version closely tracking
 upstream.
-
-To use an alternate PPA, Ondřej's PHP 5.6 for example, use the below hiera snippet
-```yaml
-php::repo::ubuntu::ppa: 'ondrej/php'
-php::manage_repos: true
-```
 
 ### Ubuntu systems and Ondřej's PPA
 
